@@ -7,7 +7,7 @@ bool cell::is_alive()
 
 void cell::flip_state()
 {
-    is_alive() ? state = dead : state = alive;
+    is_alive() ? this->state = dead : this->state = alive;
 }
 
 bool cell::operator==(const cell &c)

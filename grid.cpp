@@ -18,7 +18,7 @@ int grid::count_living_neighbors(cell& c)
     int count = 0;
     for (int i = c.x-1; i <= c.x+1; ++i) {
         for (int j = c.y-1; j <= c.y+1; ++j) {
-            if (cells[i][j] != c && c.state == cell::State::alive) ++count;
+            if (cells[i][j] != c && cells[i][j].is_alive()) ++count;
         }
     }
     return count;
