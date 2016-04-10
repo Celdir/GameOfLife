@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include "grid.h"
 
 grid::grid(int width, int height)
@@ -18,18 +16,27 @@ int grid::count_living_neighbors(cell& c)
     int count = 0;
     for (int i = c.x-1; i <= c.x+1; ++i) {
         for (int j = c.y-1; j <= c.y+1; ++j) {
-            if (cells[i][j] != c && cells[i][j].is_alive()) ++count;
+            if (i >= 0 && j >= 0 && cells[i][j] != c && cells[i][j].is_alive()) ++count;
         }
     }
     return count;
 }
 
-int main() 
+void grid::update()
 {
-    grid g(100, 100);
-    std::cout << "Created 100x100 grid of cells." << std::endl;
-    string s = g.cells[1][1] == g.cells[2][2] ? "True" : "False";
-    std::cout << "Comparing cells[1][1] with cells[2][2]: " << s << std::endl;
-    std::cout << "Cell 1 (x,y): (" << g.cells[1][1].x << ", " << g.cells[1][1].y << ")" << std::endl;
-    std::cout << "Cell 2 (x,y): (" << g.cells[2][2].x << ", " << g.cells[2][2].y << ")" << std::endl;
+    for (int i = 0; i < cells.size(); ++i) {
+        for (int j = 0; j < cells[i].size(); ++j) {
+            int live_neighbors = count_living_neighbors(cells[i][j]);
+            if (cells[i][j].is_alive()) {
+                if (live_neighbors < 2 || live_neighbors > 3) changes.push_back(&cells[i][j]);
+            } else {
+                if (live_neighbors == 3) changes.push_back(&cells[i][j]);
+            }
+        }
+    }
+
+    for (cell* c : changes) {
+        c->flip_state();
+    }
+    changes.clear();
 }
