@@ -1,6 +1,6 @@
 #include "grid.h"
 
-grid::grid(int width, int height)
+grid::grid(int w, int h) : width(w), height(h)
 {
     for (int i = 0; i < width; ++i) {
         vector<cell> c;
@@ -16,7 +16,7 @@ int grid::count_living_neighbors(cell& c)
     int count = 0;
     for (int i = c.x-1; i <= c.x+1; ++i) {
         for (int j = c.y-1; j <= c.y+1; ++j) {
-            if (i >= 0 && j >= 0 && cells[i][j] != c && cells[i][j].is_alive()) ++count;
+            if (i >= 0 && i < width && j >= 0 && j < height && cells[i][j] != c && cells[i][j].is_alive()) ++count;
         }
     }
     return count;
