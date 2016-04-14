@@ -14,4 +14,6 @@ struct grid
     int count_living_neighbors(cell& c);
 
     void update();
+    void clear();
+    void randomize();
 };

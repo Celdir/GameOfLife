@@ -10,7 +10,7 @@ default: $(OBJS)
 clean:
 	rm -rf Dependencies $(OBJS)
 
-%.o: %.cpp
+%.o: %.cpp $(SOURCES)
 	$(CXX) $(OPTS) $(DEPS) $(SOURCES) $< -o $@
 	cat $*.d >> Dependencies
 	rm -f $*.d

@@ -1,5 +1,3 @@
-#include <iostream>
-
 struct cell
 {
     enum State { dead, alive };

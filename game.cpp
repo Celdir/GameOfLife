@@ -3,13 +3,13 @@
 
 struct game
 {
-    int width, height;
+    int width, height, genskip;
     bool paused;
 
     grid* g;
     sf::RenderWindow* window;
 
-    game(int w, int h) : width(w), height(h), paused(true)
+    game(int w, int h, int gen = 1) : width(w), height(h), genskip(gen), paused(true)
     {
         g = new grid(width / 8, height / 8);
         window = new sf::RenderWindow(sf::VideoMode(width, height), "Conway's Game of Life");
@@ -25,12 +25,18 @@ struct game
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Space) paused = !paused;
                     if (event.key.code == sf::Keyboard::Escape) window->close();
+                    if (event.key.code == sf::Keyboard::C) g->clear();
+                    if (event.key.code == sf::Keyboard::R) g->randomize();
+                    if (event.key.code == sf::Keyboard::Equal) ++genskip;
+                    if (event.key.code == sf::Keyboard::Dash && genskip > 0) --genskip;
+                    if (event.key.code == sf::Keyboard::Return) genskip = 1;
                 }
-                if (paused && event.type == sf::Event::MouseButtonPressed) {
+                if (event.type == sf::Event::MouseButtonPressed) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         int x = event.mouseButton.x;
                         int y = event.mouseButton.y;
-                        g->cells[x / (width / g->width)][y / (height / g->height)].flip_state();
+                        if (x >= 0 && x < width && y >= 0 && y < height)
+                            g->cells[x / (width / g->width)][y / (height / g->height)].flip_state();
                     }
                 }
             }
@@ -38,7 +44,10 @@ struct game
             window->clear();
             draw();
             window->display();
-            if (!paused) g->update();
+            if (!paused) {
+                for (int i = 0; i < genskip; ++i) 
+                    g->update();
+            }
         }
     }
 
