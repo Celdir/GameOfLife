@@ -3,15 +3,15 @@
 
 struct game
 {
-    int width, height, genskip;
+    int width, height, cellwidth, genskip;
     bool paused;
 
     grid* g;
     sf::RenderWindow* window;
 
-    game(int w, int h, int gen = 1) : width(w), height(h), genskip(gen), paused(true)
+    game(int w, int h, int t = 16, int gen = 1) : width(w), height(h), cellwidth(t), genskip(gen), paused(true)
     {
-        g = new grid(width / 8, height / 8);
+        g = new grid(width / cellwidth, height / cellwidth);
         window = new sf::RenderWindow(sf::VideoMode(width, height), "Conway's Game of Life");
     }
 
@@ -56,7 +56,7 @@ struct game
         for (int i = 0; i < g->width; ++i){
             for (int j = 0; j < g->height; ++j) {
                 sf::RectangleShape square(sf::Vector2f(width / g->width, height / g->height));
-                square.setPosition(8 * i, 8 * j);
+                square.setPosition(cellwidth * i, cellwidth * j);
                 square.setOutlineThickness(1);
                 square.setOutlineColor(sf::Color(49, 79, 79));
                 if (g->cells[i][j].is_alive())
@@ -72,7 +72,7 @@ struct game
 
 int main()
 {
-    game g(1280, 1024);
+    game g(1920, 1080, 12);
     g.start();
 
     return 0;
